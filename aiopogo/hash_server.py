@@ -107,7 +107,7 @@ class HashServer:
                 elif e.code >= 500 or e.code == 404:
                     if e.code == 503 and self.goHash:
                         self.log.warning("Error 503 - Go Hash server cannot handle the load.")
-                    if e.code == 549 or e.code == 550 and goHash:
+                    if e.code == 549 or e.code == 550 and self.goHash:
                         self.log.warning("Error 549|550 something bad happened between Bossland and Go Hash not successful after multiple retries.")
                     raise HashingOfflineException(
                         'Hashing server error {}: {}'.format(
@@ -208,3 +208,4 @@ class HashServer:
         else:
             cls.auth_token = token
             cls.key_status = {'failures': 0}
+            
