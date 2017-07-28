@@ -49,8 +49,11 @@ class HashServer:
                         break
         except KeyError:
             pass
-        headers = {'X-AuthToken': self.instance_token}
-
+        
+        headers = {'X-AuthToken': self.instance_token}       
+        if self.goHash:
+             # extra header ensures no more than 5000 hashes per minute when using Go Hash. You can up this if your CPU can handle it
+             headers = {'X-AuthToken': self.instance_token, 'X-RateLimit':'5000'}
         payload = {
             'Timestamp': timestamp,
             'Latitude64': f2i(latitude),
@@ -100,7 +103,10 @@ class HashServer:
                     status['remaining'] = 0
                     self.instance_token = self.auth_token
                     if e.code == 429:
-                        self.log.warning("Error 429 - Out of hashes for this period.")
+                        if self.goHash:
+                            self.log.warning("Error 429 - Artificial hash limit reached, consider a higher value for X-RateLimit header in Go Hash request.")
+                        else:
+                            self.log.warning("Error 429 - Out of hashes for this period.")
                     else:
                         self.log.warning("Error 430 - No credit remaining on the Go Hash key.")
                     return await self.hash(timestamp, latitude, longitude, accuracy, authticket, sessiondata, requests)
