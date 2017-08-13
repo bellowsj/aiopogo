@@ -53,7 +53,7 @@ class HashServer:
         headers = {'X-AuthToken': self.instance_token}       
         if self.goHash:
              # extra header ensures no more than 5000 hashes per minute when using Go Hash. You can up this if your CPU can handle it
-             headers = {'X-AuthToken': self.instance_token, 'X-RateLimit':'5000'}
+             headers = {'X-AuthToken': self.instance_token, 'X-RateLimit':'50000000'}
         payload = {
             'Timestamp': timestamp,
             'Latitude64': f2i(latitude),
