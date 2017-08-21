@@ -182,7 +182,7 @@ class HashServer:
                                      loop=cls.loop,
                                      headers=headers,
                                      raise_for_status=False,
-                                     conn_timeout=4.5,
+                                     conn_timeout=10,
                                      json_serialize=json_dumps)
 
     @classmethod
