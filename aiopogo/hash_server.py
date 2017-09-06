@@ -20,6 +20,7 @@ class HashServer:
     loop = get_event_loop()
     status = {}
     log = getLogger('hashing')
+    endPointUrl = "http://pokehash.buddyauth.com/api/v143_1/hash"
 
     def __init__(self):
         try:
@@ -97,9 +98,14 @@ class HashServer:
             except ClientResponseError as e:
                 if e.code == 403:
                     raise TempHashingBanException('Your IP was temporarily banned for sending too many requests with invalid keys')
-                elif e.code == 429:
+                # allow for 429 from bossland AND for 430 from goHash
+                elif e.code == 429 or e.code == 430:
                     status['remaining'] = 0
                     self.instance_token = self.auth_token
+                    if e.code == 429:
+                        self.log.warning("Error 429 - Out of hashes for this period.")
+                    else:
+                        self.log.warning("Error 430 - No credit remaining on the Go Hash key.")
                     if e.code == 429:
                         if self.goHash:
                             self.log.warning("Error 429 - Artificial hash limit reached, consider a higher value for X-RateLimit header in Go Hash request.")
