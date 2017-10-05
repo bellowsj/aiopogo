@@ -112,12 +112,18 @@ class HashServer:
                     return await self.hash(timestamp, latitude, longitude, accuracy, authticket, sessiondata, requests)
                 elif e.code >= 500 or e.code == 404:
                     if e.code == 503 and self.goHash:
-                        self.log.warning("Error 503 - Go Hash server cannot handle the load.")
-                    if e.code == 549 or e.code == 550 and self.goHash:
-                        self.log.warning("Error 549|550 something bad happened between Bossland and Go Hash not successful after multiple retries.")
-                    raise HashingOfflineException(
-                        'Hashing server error {}: {}'.format(
-                            e.code, e.message))
+                        if attempt < 2:
+                            self.log.warning("Error 503 - Go Hash server cannot handle the load. Retrying attempt #{}".format(attempt + 1))
+                            await sleep(1.5 * (attempt + 1))
+                        else:
+                            self.log.warning("Error 503 - Go Hash server cannot handle the load. No more retries. Abandoning request.")
+                            raise HashingOfflineException('Hashing request timed out.') from e
+                    else:
+                        if e.code == 549 or e.code == 550 and self.goHash:
+                            self.log.warning("Error 549|550 something bad happened between Bossland and Go Hash not successful after multiple retries.")
+                        raise HashingOfflineException(
+                            'Hashing server error {}: {}'.format(
+                                e.code, e.message))
                 else:
                     raise UnexpectedHashResponseException('Unexpected hash code {}: {}'.format(e.code, e.message))
             except ValueError as e:
