@@ -20,7 +20,8 @@ class HashServer:
     loop = get_event_loop()
     status = {}
     log = getLogger('hashing')
-    endPointUrl = "http://pokehash.buddyauth.com/api/v147_1/hash"
+    endPointUrl = None
+    hash_apiversion = 'v147_1'
 
     def __init__(self):
         try:
@@ -168,15 +169,15 @@ class HashServer:
         return self.key_statuses[self.instance_token]
 
     @classmethod
-    def activate_session(cls, conn_limit=300, go_hash=False):
+    def activate_session(cls, conn_limit=300, go_hash=False, hash_endpoint=None, gohash_endpoint=None):
         cls.goHash = go_hash
         if cls._session and not cls._session.closed:
             return
         if cls.goHash:
-            #cls.endPointUrl = "http://hash.goman.io/api/v143_1/hash"
-            cls.endPointUrl = "http://hash.gomanager.biz/api/v147_1/hash"
+            cls.endPointUrl = "{}/api/{}/hash".format(gohash_endpoint, cls.hash_apiversion)
             cls.log.warning("Hash server set to Go Hash mode. Please ensure you are using a Go Hash NOT a Bossland hash key.")
         else:
+            cls.endPointUrl = "{}/api/{}/hash".format(hash_endpoint, cls.hash_apiversion)
             cls.log.warning("Hash server set to Bossland mode. Please ensure you are using a Bossland NOT a Go Hash hash key.")
         conn = TimedConnector(loop=cls.loop,
                               limit=conn_limit,
