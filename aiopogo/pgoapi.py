@@ -68,9 +68,9 @@ class PGoApi:
         return PGoApiRequest(self)
 
     @staticmethod
-    def activate_hash_server(hash_token, conn_limit=300, go_hash=False):
+    def activate_hash_server(hash_token, conn_limit=300, go_hash=False, hash_endpoint=None, gohash_endpoint=None):
         HashServer.set_token(hash_token)
-        HashServer.activate_session(conn_limit, go_hash)
+        HashServer.activate_session(conn_limit, go_hash, hash_endpoint, gohash_endpoint)
 
     @property
     def position(self):
