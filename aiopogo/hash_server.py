@@ -108,8 +108,10 @@ class HashServer:
                             self.log.warning("Error 429 - Artificial hash limit reached, consider a higher value for X-RateLimit header in Go Hash request.")
                         else:
                             self.log.warning("Error 429 - Out of hashes for this period.")
-                    else:
+                    elif e.code == 430:
                         self.log.warning("Error 430 - No credit remaining on the Go Hash key.")
+                    else:
+                        self.log.warning("Unexpected error: {}", e)
                     return await self.hash(timestamp, latitude, longitude, accuracy, authticket, sessiondata, requests)
                 elif e.code >= 500 or e.code == 404:
                     if e.code == 503 and self.goHash:
