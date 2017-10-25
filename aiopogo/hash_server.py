@@ -4,6 +4,7 @@ from asyncio import get_event_loop, TimeoutError, CancelledError, sleep
 from itertools import cycle
 from time import time
 from logging import getLogger
+from cyrandom import randint
 
 from aiohttp import ClientSession, ClientError, ClientResponseError, ServerConnectionError, ServerTimeoutError
 
@@ -20,7 +21,8 @@ class HashServer:
     loop = get_event_loop()
     status = {}
     log = getLogger('hashing')
-    endPointUrl = "http://pokehash.buddyauth.com/api/v147_1/hash"
+    #endPointUrl = "http://pokehash.buddyauth.com/api/v147_1/hash"
+    endPointUrl = ["http://37.187.141.154/api/v147_1/hash","http://37.187.139.32/api/v147_1/hash","http://37.187.144.73/api/v147_1/hash","http://151.80.20.113/api/v147_1/hash","http://178.33.229.207/api/v147_1/hash","http://5.39.73.156/api/v147_1/hash"]
 
     def __init__(self):
         try:
@@ -67,7 +69,7 @@ class HashServer:
         # request hashes from hashing server
         for attempt in range(3):
             try:
-                async with self._session.post(self.endPointUrl, headers=headers, json=payload) as resp:
+                async with self._session.post(self.endPointUrl[randint(0,5)], headers=headers, json=payload) as resp:
                     if resp.status == 400:
                         status['failures'] += 1
 
