@@ -416,27 +416,28 @@ class RpcApi:
             message.ParseFromString(subresponse)
             responses[entry_name] = message
 
-            for i, subresponse in enumerate(response_proto.platform_returns):
-              request_entry = subresponse.type
+        for i, subresponse in enumerate(response_proto.platform_returns):
+            request_entry = subresponse.type
 
-              entry_name = PlatformRequestType.Name(
-                  request_entry if isinstance(
-                        request_entry, int) else request_entry[0])
-              proto_name = entry_name.lower() + '_response'
- 
-              try:
-                  class_ = globals()[proto_name]
-              except KeyError:
-                  globals()[proto_name] = class_ = getattr(
-                      import_module(
-                          'pogoprotos.networking.platform.responses.' +
-                          proto_name +
-                          '_pb2'),
-                      to_camel_case(proto_name))
+            entry_name = PlatformRequestType.Name(
+                request_entry if isinstance(
+                    request_entry, int) else request_entry[0])
+            proto_name = entry_name.lower() + '_response'
 
-              message = class_()
-              message.ParseFromString(subresponse.response)
-              responses[entry_name] = message
+            try:
+                class_ = globals()[proto_name]
+            except KeyError:
+                globals()[proto_name] = class_ = getattr(
+                    import_module(
+                        'pogoprotos.networking.platform.responses.' +
+                        proto_name +
+                        '_pb2'),
+                    to_camel_case(proto_name))
+
+            message = class_()
+            message.ParseFromString(subresponse.response)
+            responses[entry_name] = message
+
         return responses
 
 

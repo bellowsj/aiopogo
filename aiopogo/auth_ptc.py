@@ -56,6 +56,7 @@ class AuthPtc(Auth):
                     read_timeout=self.timeout) as session:
                 async with session.get('https://sso.pokemon.com/sso/logout', params={'service': 'https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize'}, proxy=self.proxy, proxy_auth=self.proxy_auth, allow_redirects=False) as _:
                     pass
+
                 async with session.get('https://sso.pokemon.com/sso/login', params={'service': 'https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize', 'locale': self.locale}, proxy=self.proxy, proxy_auth=self.proxy_auth) as resp:
                     data = await resp.json(loads=json_loads, encoding='utf-8', content_type=None)
 
