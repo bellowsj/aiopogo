@@ -21,7 +21,7 @@ class HashServer:
     status = {}
     log = getLogger('hashing')
     endPointUrl = None
-    hash_apiversion = 'v153_2'
+    hash_apiversion = 'v157_5'
 
     def __init__(self):
         try:
