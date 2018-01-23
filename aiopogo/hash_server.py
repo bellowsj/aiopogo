@@ -21,8 +21,8 @@ class HashServer:
     loop = get_event_loop()
     status = {}
     log = getLogger('hashing')
-    #endPointUrl = "http://pokehash.buddyauth.com/api/v157_5/hash"
-    endPointUrl = ["http://37.187.141.154/api/v157_5/hash","http://37.187.139.32/api/v157_5/hash","http://37.187.144.73/api/v157_5/hash","http://151.80.20.113/api/v157_5/hash","http://178.33.229.207/api/v157_5/hash","http://5.39.73.156/api/v157_5/hash"]
+    #endPointUrl = "http://pokehash.buddyauth.com/api/v159_1/hash"
+    endPointUrl = ["http://37.187.141.154/api/v159_1/hash","http://37.187.139.32/api/v159_1/hash","http://37.187.144.73/api/v159_1/hash","http://151.80.20.113/api/v159_1/hash","http://178.33.229.207/api/v159_1/hash","http://5.39.73.156/api/v159_1/hash"]
 
     def __init__(self):
         try:
